@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A warm, honest directory of genuinely free learning: courses, certificates, textbooks, lecture archives, language apps, and gentle coding walks.">
+<title>Actually Free to Learn — a warm directory of genuinely free education</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #2f2a26;
+    --muted: #6b625b;
+    --accent: #b0532e;
+    --accent-soft: #f6e8e0;
+    --chip-bg: #efe9e2;
+    --chip-active: #b0532e;
+    --chip-active-ink: #fff;
+    --border: #e7dfd5;
+    --free: #2e7d4f;
+    --free-soft: #e7f2ea;
+    --limit: #8a6d1e;
+    --limit-soft: #f6efdd;
+    --recheck: #9a3412;
+    --recheck-soft: #fdece4;
+    --shadow: 0 1px 2px rgba(47,42,38,.06), 0 6px 18px rgba(47,42,38,.06);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    line-height: 1.6;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  header.hero { padding: 44px 0 8px; }
+  .hero h1 {
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    margin: 0 0 10px;
+    letter-spacing: -0.02em;
+  }
+  .hero p.lede { font-size: 1.08rem; color: var(--muted); max-width: 62ch; margin: 0; }
+  .hero .byline { margin-top: 10px; font-size: .9rem; color: var(--muted); font-style: italic; }
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    padding: 14px 0;
+    margin-top: 26px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .toolbar-inner { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  #search {
+    flex: 1 1 260px;
+    min-width: 220px;
+    font: inherit;
+    font-size: 1rem;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+  }
+  #search:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip {
+    font: inherit;
+    font-size: .92rem;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--chip-bg);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .chip:hover { background: var(--accent-soft); }
+  .chip[aria-pressed="true"] {
+    background: var(--chip-active);
+    color: var(--chip-active-ink);
+    border-color: var(--chip-active);
+  }
+  .count-line { margin: 16px 0 4px; color: var(--muted); font-size: .95rem; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 18px;
+    padding-bottom: 40px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 20px 18px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card .top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .cat-badge {
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    white-space: nowrap;
+  }
+  .card h2 { font-size: 1.18rem; margin: 0; line-height: 1.35; }
+  .card h2 a { color: var(--ink); text-decoration: none; }
+  .card h2 a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
+  .provider { color: var(--muted); font-size: .92rem; margin: 0; }
+  .field { font-size: .95rem; }
+  .field .label {
+    display: inline-block;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: .74rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .freebox {
+    background: var(--free-soft);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: .95rem;
+  }
+  .freebox .label { color: var(--free); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 2px; }
+  .limitsbox {
+    background: var(--limit-soft);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: .95rem;
+  }
+  .limitsbox .label { color: var(--limit); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 2px; }
+  .recheck-note {
+    background: var(--recheck-soft);
+    color: var(--recheck);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: .88rem;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    color: var(--muted);
+    font-size: .85rem;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    margin-top: auto;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: .78rem;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 2px 10px;
+  }
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 20px;
+    font-size: 1.05rem;
+  }
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 26px 0 44px;
+    color: var(--muted);
+    font-size: .92rem;
+  }
+  footer strong { color: var(--ink); }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+</head>
+<body>
+<header class="hero wrap">
+  <h1>Actually Free to Learn</h1>
+  <p class="lede">
+    A small, honest directory of things you can learn online without paying a cent —
+    full courses, real certificates, open textbooks, recorded lectures, language apps,
+    and gentle walks into coding. Each card tells you what you'll learn, what is
+    actually free, how long it takes, and where the catches are. No affiliate links,
+    no marketing voice, just a friend pointing at the good stuff.
+  </p>
+  <p class="byline">Maintained by Asdale Dynamics, LLC · data last edited <span data-meta="lastEdited"></span></p>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="toolbar-inner">
+      <label class="sr-only" for="search">Search the directory</label>
+      <input id="search" type="search" placeholder="Search — try 'python', 'german', 'certificate'…" autocomplete="off">
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <p class="count-line" id="count-line" role="status"></p>
+  <div class="grid" id="grid" aria-live="polite"></div>
+  <div class="empty" id="empty" hidden>
+    Nothing matches yet — try a shorter search, or clear the category filter.
+  </div>
+</main>
+
+<footer class="wrap">
+  <p>
+    <strong>Actually Free to Learn</strong> is maintained by
+    <strong>Asdale Dynamics, LLC</strong> in the spirit of plain-English, beginner-friendly
+    learning — the same tone as Dylan Asdale's <em>The Massive AI Manual</em>.
+    Every entry was hand-verified as free on its "verified free on" date and carries a
+    "check again by" date, because free-ness can quietly change.
+  </p>
+  <p>
+    No affiliate links, ever. Data lives in <code>data.json</code>; the page works
+    offline straight from a file on your computer. Released under the MIT License.
+  </p>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  "use strict";
+  var DATA = window.FREE_LEARN_DATA;
+  var resources = DATA.resources;
+  var categories = DATA.categories;
+  var labels = DATA.categoryLabels;
+
+  var grid = document.getElementById("grid");
+  var chipsEl = document.getElementById("chips");
+  var searchEl = document.getElementById("search");
+  var countLine = document.getElementById("count-line");
+  var emptyEl = document.getElementById("empty");
+
+  var state = { category: "all", query: "" };
+
+  // Mark entries whose "check again by" date has passed.
+  function isOverdue(res) {
+    return new Date(res.recheckBy + "T23:59:59") < new Date();
+  }
+
+  function fmtDate(iso) {
+    try {
+      return new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
+        year: "numeric", month: "short", day: "numeric"
+      });
+    } catch (e) { return iso; }
+  }
+
+  function matches(res) {
+    if (state.category !== "all" && res.category !== state.category) return false;
+    var q = state.query.trim().toLowerCase();
+    if (!q) return true;
+    var hay = [
+      res.title, res.provider, res.whatYouLearn, res.whatsFree,
+      res.category, labels[res.category] || "", res.tags.join(" ")
+    ].join(" ").toLowerCase();
+    return q.split(/\s+/).every(function (word) { return hay.indexOf(word) !== -1; });
+  }
+
+  function cardHtml(res) {
+    var parts = [];
+    parts.push('<article class="card" data-id="' + res.id + '">');
+    parts.push('<div class="top"><span class="cat-badge">' + esc(labels[res.category] || res.category) + '</span></div>');
+    parts.push('<h2><a href="' + esc(res.url) + '" target="_blank" rel="noopener noreferrer">' + esc(res.title) + '</a></h2>');
+    parts.push('<p class="provider">' + esc(res.provider) + '</p>');
+    parts.push('<div class="field"><span class="label">What you learn</span><div>' + esc(res.whatYouLearn) + '</div></div>');
+    parts.push('<div class="freebox"><span class="label">What\u2019s actually free</span>' + esc(res.whatsFree) + '</div>');
+    parts.push('<div class="field"><span class="label">Time needed</span><div>' + esc(res.timeNeeded) + '</div></div>');
+    parts.push('<div class="limitsbox"><span class="label">Honest limits</span>' + esc(res.honestLimits) + '</div>');
+    parts.push('<div class="tags">' + res.tags.map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join("") + '</div>');
+    if (isOverdue(res)) {
+      parts.push('<div class="recheck-note">Time to re-verify this one — its recheck date (' + fmtDate(res.recheckBy) + ') has passed. Details shown may be out of date.</div>');
+    } else {
+      parts.push('<div class="meta-line"><span>Verified free on ' + fmtDate(res.verifiedFreeOn) + '</span><span>Check again by ' + fmtDate(res.recheckBy) + '</span></div>');
+    }
+    parts.push('</article>');
+    return parts.join("");
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function render() {
+    var shown = resources.filter(matches);
+    grid.innerHTML = shown.map(cardHtml).join("");
+    emptyEl.hidden = shown.length !== 0;
+    var n = shown.length;
+    countLine.textContent =
+      "Showing " + n + " of " + resources.length + " entries" +
+      (state.category !== "all" ? " in \u201C" + (labels[state.category] || state.category) + "\u201D" : "") +
+      (state.query.trim() ? " matching \u201C" + state.query.trim() + "\u201D" : "") + ".";
+  }
+
+  function buildChips() {
+    var defs = [["all", "Everything"]].concat(categories.map(function (c) {
+      return [c, labels[c] || c];
+    }));
+    chipsEl.innerHTML = defs.map(function (def) {
+      return '<button class="chip" type="button" data-cat="' + def[0] + '" aria-pressed="' +
+        (def[0] === "all" ? "true" : "false") + '">' + esc(def[1]) + '</button>';
+    }).join("");
+    chipsEl.addEventListener("click", function (ev) {
+      var btn = ev.target.closest(".chip");
+      if (!btn) return;
+      state.category = btn.getAttribute("data-cat");
+      var chips = chipsEl.querySelectorAll(".chip");
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].setAttribute("aria-pressed", chips[i] === btn ? "true" : "false");
+      }
+      render();
+    });
+  }
+
+  searchEl.addEventListener("input", function () {
+    state.query = searchEl.value;
+    render();
+  });
+
+  // Fill hero/footer meta.
+  var metaEls = document.querySelectorAll("[data-meta='lastEdited']");
+  for (var m = 0; m < metaEls.length; m++) metaEls[m].textContent = DATA.meta.lastEdited;
+
+  buildChips();
+  render();
+})();
+</script>
+</body>
+</html>
